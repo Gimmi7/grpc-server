@@ -1,1 +1,1 @@
-# grpc-stream
+# grpc-server
