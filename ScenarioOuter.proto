@@ -1,0 +1,38 @@
+syntax="proto3";
+
+option java_multiple_files=true;
+
+package com.wcy.scenario;
+
+service Scenario{
+	rpc CheekIn(stream Person) returns (Empty) {}
+	rpc Chunker(Empty) returns (stream Chunk) {}
+	rpc GetCompanies(CompanyName) returns (stream Company) {}
+	rpc BatchWriteCompanies(stream Company) returns (Empty) {}
+	rpc Translate(stream Sentence) returns (stream Sentence) {}
+}
+
+message Person{
+	string name=1;
+}
+
+message Empty{}
+
+message Chunk{
+	bytes chunk=1;
+}
+
+message CompanyName{
+	string companyName=1;
+}
+
+message Company{
+	string name=1;
+	string storedIn=2;
+}
+
+message Sentence{
+	string sentence=1;
+}
+	
+
