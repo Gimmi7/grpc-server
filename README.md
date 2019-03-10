@@ -101,7 +101,7 @@ public class StatusRuntimeException extends RuntimeException{}
 `Context.current()`可以获取当前线程的Context.
 然后可以使用2中方法来处理deadline
 * `Context.current().isCanceled()`,通过判断响应流是否已经因为过期而被取消,
-然后执行处理代码。缺点就是可能在你判断的时候没有被取消，不过在你执行处理代码过程中被取消了。
+然后执行处理代码。缺点就是可能在你判断的时候没有被取消，不过可能在你执行处理代码过程中被取消了。
 * `Context.current().getDeadline()`这里返回的deadline是客户端deadline+传输时间；
 可以通过取得deadline，自己写一个计时器，来处理执行代码。不过这里有两个问题。<br>
     * 服务端流情况下，deadline只能获取一次，并发怎么做。
