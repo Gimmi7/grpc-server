@@ -7,6 +7,7 @@ import com.wcy.scenario.*;
 import com.wcy.util.Company2item;
 import com.wcy.util.GetCompanyFromFS;
 import com.wcy.util.MappedFileReader;
+import io.grpc.Context;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -81,18 +82,33 @@ public class ScenarioService extends ScenarioGrpc.ScenarioImplBase {
         new Thread(){
             @Override
             public void run() {
+                Context context=Context.current();
+                System.out.println(Thread.currentThread().getId()+" : (son)context`s deadline is "+context.getDeadline());
+                Company company=null;
                 try {
-                    Company company=new GetCompanyFromFS().get(request.getCompanyName());
+                    company=new GetCompanyFromFS().get(request.getCompanyName());
                     sleep(5000);
-                    responseObserver.onNext(company);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                System.out.println("睡了5秒*******************************");
+                responseObserver.onNext(company);
+                System.out.println("睡了5秒，执行了onNext()++++++++++++++++++++");
+                try {
+                    sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("睡了5秒，执行了onNext(),又睡了5秒---------------");
             }
         }.start();
 
+        Context context=Context.current();
+        System.out.println(Thread.currentThread().getId()+" : (father)context`s deadline is "+context.getDeadline());
+//        throw new RuntimeException("custom runtime exception*******************");
                 Iterator<Item> iterator=dao.queryItem(request);
                 Item item=iterator.next();
                 Company company=Company.newBuilder()
